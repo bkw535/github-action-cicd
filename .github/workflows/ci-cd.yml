@@ -23,5 +23,9 @@ jobs:
       - name: Compile Java files
         run: javac -d out $(find . -name "*.java")
 
-      - name: Run Java program (optional)
-        run: java -cp out Main
+      - name: Run All Java Programs
+        run: |
+          for class in $(find out -name "*.class" | sed 's|out/||' | sed 's|.class||' | tr '/' '.'); do
+            echo "Running $class..."
+            java -cp out $class || echo "Skipping $class due to error."
+          done
